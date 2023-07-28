@@ -12,6 +12,8 @@ Build-Depends:
  libpam0g-dev,
  libpkcs11-helper1-dev,
  libssl-dev,
+ libcap-ng-dev [linux-any],
+ libnl-genl-3-dev [linux-any],
  libsystemd-dev [linux-any],
  net-tools [!linux-any],
  pkg-config,

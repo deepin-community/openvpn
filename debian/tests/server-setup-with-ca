@@ -4,7 +4,7 @@
 # Test an OpenVPN server setup with CA
 # ----------------------------------------------
 
-set -e
+set -ex
 
 CONFIG_DIR=/etc/openvpn
 CA_DIR=easy-rsa
@@ -39,6 +39,8 @@ EOF
 
 info "Setup the CA and the server keys"
 ./easyrsa --batch init-pki
+# remove conflicting vars file to avoid easy-rsa errors
+rm -f vars
 ./easyrsa --batch build-ca nopass 2>/dev/null
 ./easyrsa --batch build-server-full server nopass 2>/dev/null
 ./easyrsa --batch gen-dh 2>/dev/null

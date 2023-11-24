@@ -1,19 +1,232 @@
-openvpn (2.6.5-1) unstable; urgency=medium
+openvpn (2.6.7-1) unstable; urgency=medium
 
-  * Fix use-after-free with EVP_CIPHER_free
-  * dco_linux: properly close dco version file
-  * DCO: fix memory leak in dco_get_peer_stats_multi for Linux
-  * Fix two unused assignments
-  * sample-plugins: Fix memleak in client-connect example plugin
-  * options: remove --key-method from usage message
-  * msvc-generate: include version.m4.in in tarball
-  * src/openvpn/dco_freebsd.c: handle malloc failure
-  * dco-win: support for --dev-node
-  * tapctl: generate driver-specific adapter names
-  * Correctly handle Unicode names for exit event
-  * Interactive service: do not force a target desktop for openvpn.exe
+  [ Aquila Macedo ]
+  * d/control: bump debhelper-compat level to 13.
+  * d/patches: Remove outdated patches
+  * d/patches: fix typo in openvpn binary
+  * d/patches: fix typo in manpages
+  * d/copyright: Update license to BSD-2
+  * d/openvpn.service: add documentation
 
- -- Bernhard Schmidt <berni@debian.org>  Fri, 14 May 2021 09:40:04 +0200
+  [ Bernhard Schmidt ]
+  * New upstream version 2.6.7, fixing two CVEs (Closes: #1055805)
+    - CVE-2023-46849: Use of --fragment option can lead to a division by zero
+      error which can be fatal
+    - CVE-2023-46850: Incorrect use of send buffer can cause memory to be sent
+      to peer
+  * Pick patch recommended by upstream in GH#449 to fix segfault
+    introduced in 2.6.7
+
+  [ Remus-Gabriel Chelu ]
+  * Add Romanian templates translation (Closes: #1033179)
+
+ -- Bernhard Schmidt <berni@debian.org>  Sat, 11 Nov 2023 22:01:15 +0100
+
+openvpn (2.6.3-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+
+  [ Helmut Grohne ]
+  * Do not install systemd units twice (Closes: #1054083)
+
+ -- Jochen Sprickerhof <jspricke@debian.org>  Fri, 27 Oct 2023 16:26:34 +0200
+
+openvpn (2.6.3-2) unstable; urgency=medium
+
+  * Cherry-pick two bugfix commits from upstream
+    - Memory leak in dco_get_peer_stats_multi for Linux
+    - dangling pointer passed to pkcs11-helper
+
+ -- Bernhard Schmidt <berni@debian.org>  Sat, 20 May 2023 17:43:32 +0200
+
+openvpn (2.6.3-1) unstable; urgency=medium
+
+  * New upstream version 2.6.2
+    - drop patches applied upstream
+    - needs new openvpn-dco-dkms version. Not adding a versioned dependency
+      to untangle testing migration, because it will just not use the
+      "wrong" version and run unaccelerated.
+  * New upstream version 2.6.3
+
+ -- Bernhard Schmidt <berni@debian.org>  Thu, 13 Apr 2023 09:19:40 +0200
+
+openvpn (2.6.1-1) unstable; urgency=medium
+
+  * Upload to unstable targetting bookworm
+  * Cherry-Pick upstream commits from 2.6.2
+    - fix rare ASSERT in tls-crypt
+    - fix memory leaks in HMAC initial packet generation
+    - set netlink socket to be non-blocking
+
+ -- Bernhard Schmidt <berni@debian.org>  Sun, 26 Mar 2023 11:14:26 +0200
+
+openvpn (2.6.1-1~exp1) experimental; urgency=medium
+
+  * New upstream version 2.6.1
+    - target experimental due to the freeze
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 10 Mar 2023 09:02:22 +0100
+
+openvpn (2.6.0-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0
+  * Drop dco netlink buffer overflow patch applied upstream
+  * Drop obsolete lsb-base dependency
+
+ -- Bernhard Schmidt <berni@debian.org>  Wed, 25 Jan 2023 22:27:04 +0100
+
+openvpn (2.6.0~rc2-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~rc2
+  * Add upstream pending patch to work around dco netlink buffer overflow
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 13 Jan 2023 19:02:01 +0100
+
+openvpn (2.6.0~rc1-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~rc1 (Closes: #1014376)
+  * Drop DCO workaround applied upstream
+
+ -- Bernhard Schmidt <berni@debian.org>  Wed, 28 Dec 2022 22:51:31 +0100
+
+openvpn (2.6.0~git20221222-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20221222
+  * Import pending upstream fix for race conditions in DCO servers
+  * d/openvpn@.service: Replace LimitNPROC=100 with TasksMax=10
+    (see Bug#861923 for discussion)
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 23 Dec 2022 22:43:39 +0100
+
+openvpn (2.6.0~git20221215+beta2-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20221215+beta2
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 16 Dec 2022 11:54:27 +0100
+
+openvpn (2.6.0~git20221201-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20221201, also known as 2.6_beta1
+  * Update d/NEWS to list known backwards compatibility issues
+  * Fix national encoding on d/po/{es,sv}.po
+  * Drop obsolete patches
+
+ -- Bernhard Schmidt <berni@debian.org>  Sun, 04 Dec 2022 21:32:37 +0100
+
+openvpn (2.6.0~git20221116-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20221116
+    * Various improvements regarding MTU calculation
+
+ -- Bernhard Schmidt <berni@debian.org>  Tue, 22 Nov 2022 11:50:13 +0100
+
+openvpn (2.6.0~git20220818-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20220818
+  * Only depend on libcap-ng-dev on Linux
+  * Drop d/p/disable-dco-without-necessary-capabilities applied upstream
+
+ -- Bernhard Schmidt <berni@debian.org>  Thu, 18 Aug 2022 10:48:47 +0200
+
+openvpn (2.6.0~git20220811-2) unstable; urgency=medium
+
+  * Cherry-Pick proposed upstream fix to disable DCO if unable to retain
+    capabilities, fixes network-manager-openvpn together with DCO
+    (Closes: #1017379)
+
+ -- Bernhard Schmidt <berni@debian.org>  Wed, 17 Aug 2022 15:30:31 +0200
+
+openvpn (2.6.0~git20220811-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20220811
+    * Retain CAP_NET_ADMIN when dropping privileges (Closes: #976070)
+  * Add build-dependency on libcap-ng-dev
+  * Explicitly disable unit tests (Closes: #1016057)
+  * Drop obsolete entries from d/copyright
+
+ -- Bernhard Schmidt <berni@debian.org>  Thu, 11 Aug 2022 16:05:36 +0200
+
+openvpn (2.6.0~git20220808-1) unstable; urgency=medium
+
+  [ Gianfranco Costamagna ]
+  * d/t/server-setup-with-ca:
+    - cherry-pick change in easy-rsa autopkgtests to remove conflicting
+      "vars" file.
+
+  [ Bernhard Schmidt ]
+  * New upstream version 2.6.0~git20220808
+    - switch to master branch now that DCO support has been merged
+  * Drop OpenSSL 3.0 digest name patch applied upstream
+
+ -- Bernhard Schmidt <berni@debian.org>  Tue, 09 Aug 2022 11:31:12 +0200
+
+openvpn (2.6.0~git20220518+dco-3) unstable; urgency=medium
+
+  [ Lucas Kanashiro ]
+  * d/t/server-setup-with-static-key: set cipher to be DES-EDE3-CBC
+  * d/t/server-setup-with-static-key: use 'secret' to generate key
+  * d/t/server-setup-with-*: use 'set -x' in the test scripts
+  * d/t/control: add allow-stderr restriction
+
+  [ Bernhard Schmidt ]
+  * Import Ubuntu patch cherry-picked from upstream to translate OpenSSL 3.0
+    digest names into OpenSSL 1.1 digest names (Closes: #1012129)
+
+ -- Bernhard Schmidt <berni@debian.org>  Sun, 24 Jul 2022 17:13:47 +0200
+
+openvpn (2.6.0~git20220518+dco-2) unstable; urgency=medium
+
+  * Add d/NEWS entry about the release notes and DCO (Closes: #1011372)
+
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 30 May 2022 15:44:41 +0200
+
+openvpn (2.6.0~git20220518+dco-1) unstable; urgency=medium
+
+  * New upstream version 2.6.0~git20220518+dco
+  * Release to unstable
+  * Revert "Build against OpenSSL 3.0", OpenSSL 3.0 has landed in unstable
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 20 May 2022 08:35:29 +0200
+
+openvpn (2.6.0~git20220510+dco-1) experimental; urgency=medium
+
+  * New upstream version 2.6.0~git20220510+dco
+  * Suggest openvpn-dco-dkms
+  * Drop iproute2, linux builds use netlink
+  * Limit libnl-genl-3-dev build-dep (for dco) to linux-any
+  * Build against OpenSSL 3.0
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 13 May 2022 00:01:35 +0200
+
+openvpn (2.6.0~git20220317+dco-1) experimental; urgency=medium
+
+  * New upstream version 2.6.0~git20220317+dco
+    This is a snapshot of the upstream dco branch (data-channel offloading)
+
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 21 Mar 2022 11:54:29 +0100
+
+openvpn (2.5.6-1) unstable; urgency=high
+
+  * New upstream version 2.5.6
+    CVE-2022-0547 - Potential authentication by-pass with multiple deferred
+    authentication plug-ins plug-ins (Closes: #1008015)
+
+ -- Bernhard Schmidt <berni@debian.org>  Sun, 20 Mar 2022 21:42:05 +0100
+
+openvpn (2.5.5-1) unstable; urgency=medium
+
+  [ Jörg Frings-Fürst ]
+  * New upstream version 2.5.5
+  * Declare compliance with Debian Policy 4.6.0.1
+  * d/copyright:
+    - Remove duplicate entries;
+    - Refresh for new upstream release
+    - Add 2021 to myself
+
+  [ Bernhard Schmidt ]
+  * Refresh patches for new upstream version
+
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 21 Feb 2022 12:05:55 +0100
 
 openvpn (2.5.1-3) unstable; urgency=medium
 

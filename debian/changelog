@@ -1,3 +1,33 @@
+openvpn (2.6.12-1) unstable; urgency=medium
+
+  * New upstream version 2.6.12
+    - Fix regression in CVE-2024-5594 patch breaking user configurations with
+      AUTH_FAIL messages having trailing CR/NL characters. This often happens
+      if the AUTH_FAIL reason is set by a script
+
+ -- Bernhard Schmidt <berni@debian.org>  Thu, 18 Jul 2024 23:30:00 +0200
+
+openvpn (2.6.11-1) unstable; urgency=medium
+
+  * New upstream version 2.6.11 (Closes: #1074488)
+    - CVE-2024-28882
+      client can circumvent management client-kill
+    - CVE-2024-5594
+      malicious peer can DoS or send garbage to logs
+  * d/openvpn@.service: Add CAP_SETPCAP required for openvpn-dco-dkms
+    (Closes: #1074504)
+  * drop d/patches/systemd.patch, applied upstream
+
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 08 Jul 2024 00:06:59 +0200
+
+openvpn (2.6.9-1) unstable; urgency=medium
+
+  * New upstream version 2.6.9
+  * Switch to systemd-dev (Closes: #1060500)
+  * Install systemd generator and units into /usr. (Closes: #1064399)
+
+ -- Bernhard Schmidt <berni@debian.org>  Wed, 28 Feb 2024 08:43:25 +0100
+
 openvpn (2.6.7-1) unstable; urgency=medium
 
   [ Aquila Macedo ]

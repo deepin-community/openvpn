@@ -1,3 +1,28 @@
+openvpn (2.6.14-2) unstable; urgency=medium
+
+  * Cherry-pick upstream fix to build with Kernel 6.16+ (Closes: #1114249)
+  * d/control: Set homepage to the community (open-source) subpage
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 05 Sep 2025 22:13:12 +0200
+
+openvpn (2.6.14-1) unstable; urgency=medium
+
+  [ Aquila Macedo ]
+  * Add new autopkgtest for unit tests
+
+  [ Bernhard Schmidt ]
+  * New upstream version 2.6.14
+    - CVE-2025-2704 possible ASSERT() on OpenVPN servers using --tls-crypt-v2
+      (Closes: #1101935)
+
+ -- Bernhard Schmidt <berni@debian.org>  Wed, 02 Apr 2025 20:56:44 +0200
+
+openvpn (2.6.13-1) unstable; urgency=medium
+
+  * New upstream version 2.6.13 (Closes: #1095675)
+
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 10 Feb 2025 22:09:11 +0100
+
 openvpn (2.6.12-1) unstable; urgency=medium
 
   * New upstream version 2.6.12

@@ -256,6 +256,7 @@ am__networking_testdriver_SOURCES_DIST = test_networking.c mock_msg.c \
 	$(top_srcdir)/src/openvpn/crypto.c \
 	$(top_srcdir)/src/openvpn/crypto_mbedtls.c \
 	$(top_srcdir)/src/openvpn/crypto_openssl.c \
+	$(top_srcdir)/src/openvpn/fdmisc.c \
 	$(top_srcdir)/src/openvpn/otime.c \
 	$(top_srcdir)/src/openvpn/packet_id.c \
 	$(top_srcdir)/src/openvpn/platform.c
@@ -266,6 +267,7 @@ am__networking_testdriver_SOURCES_DIST = test_networking.c mock_msg.c \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-crypto.$(OBJEXT) \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-crypto_mbedtls.$(OBJEXT) \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-crypto_openssl.$(OBJEXT) \
+@HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.$(OBJEXT) \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-otime.$(OBJEXT) \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-packet_id.$(OBJEXT) \
 @HAVE_SITNL_TRUE@	$(top_builddir)/src/openvpn/networking_testdriver-platform.$(OBJEXT)
@@ -437,6 +439,7 @@ am__depfiles_remade = $(top_builddir)/src/compat/$(DEPDIR)/ncp_testdriver-compat
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto.Po \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_mbedtls.Po \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_openssl.Po \
+	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-networking_sitnl.Po \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Po \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-packet_id.Po \
@@ -724,6 +727,7 @@ TEST_CFLAGS = @TEST_CFLAGS@
 TEST_LDFLAGS = @TEST_LDFLAGS@
 TMPFILES_DIR = @TMPFILES_DIR@
 VERSION = @VERSION@
+WINDMC = @WINDMC@
 WOLFSSL_CFLAGS = @WOLFSSL_CFLAGS@
 WOLFSSL_INCLUDEDIR = @WOLFSSL_INCLUDEDIR@
 WOLFSSL_LIBS = @WOLFSSL_LIBS@
@@ -734,6 +738,7 @@ abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_WINDMC = @ac_ct_WINDMC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -898,6 +903,7 @@ pkt_testdriver_SOURCES = test_pkt.c mock_msg.c mock_msg.h mock_win32_execve.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/crypto.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/crypto_mbedtls.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/crypto_openssl.c \
+@HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/fdmisc.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/otime.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/packet_id.c \
 @HAVE_SITNL_TRUE@	$(top_srcdir)/src/openvpn/platform.c
@@ -1214,6 +1220,9 @@ $(top_builddir)/src/openvpn/networking_testdriver-crypto_mbedtls.$(OBJEXT):  \
 $(top_builddir)/src/openvpn/networking_testdriver-crypto_openssl.$(OBJEXT):  \
 	$(top_builddir)/src/openvpn/$(am__dirstamp) \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp)
+$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.$(OBJEXT):  \
+	$(top_builddir)/src/openvpn/$(am__dirstamp) \
+	$(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp)
 $(top_builddir)/src/openvpn/networking_testdriver-otime.$(OBJEXT):  \
 	$(top_builddir)/src/openvpn/$(am__dirstamp) \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp)
@@ -1422,6 +1431,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_mbedtls.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_openssl.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-networking_sitnl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-packet_id.Po@am__quote@ # am--include-marker
@@ -2523,6 +2533,20 @@ $(top_builddir)/src/openvpn/networking_testdriver-crypto_openssl.obj: $(top_buil
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/networking_testdriver-crypto_openssl.obj `if test -f '$(top_builddir)/src/openvpn/crypto_openssl.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/crypto_openssl.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/crypto_openssl.c'; fi`
 
+$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.o: $(top_builddir)/src/openvpn/fdmisc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.o -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Tpo -c -o $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.o `test -f '$(top_builddir)/src/openvpn/fdmisc.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/fdmisc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/fdmisc.c' object='$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.o `test -f '$(top_builddir)/src/openvpn/fdmisc.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/fdmisc.c
+
+$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.obj: $(top_builddir)/src/openvpn/fdmisc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.obj -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Tpo -c -o $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.obj `if test -f '$(top_builddir)/src/openvpn/fdmisc.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/fdmisc.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/fdmisc.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/fdmisc.c' object='$(top_builddir)/src/openvpn/networking_testdriver-fdmisc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/networking_testdriver-fdmisc.obj `if test -f '$(top_builddir)/src/openvpn/fdmisc.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/fdmisc.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/fdmisc.c'; fi`
+
 $(top_builddir)/src/openvpn/networking_testdriver-otime.o: $(top_builddir)/src/openvpn/otime.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(networking_testdriver_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/networking_testdriver-otime.o -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Tpo -c -o $(top_builddir)/src/openvpn/networking_testdriver-otime.o `test -f '$(top_builddir)/src/openvpn/otime.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/otime.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Po
@@ -3572,6 +3596,7 @@ distclean: distclean-am
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_mbedtls.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_openssl.Po
+	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-networking_sitnl.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-packet_id.Po
@@ -3743,6 +3768,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_mbedtls.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-crypto_openssl.Po
+	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-fdmisc.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-networking_sitnl.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-otime.Po
 	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/networking_testdriver-packet_id.Po

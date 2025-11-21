@@ -1,3 +1,12 @@
+openvpn (2.6.16-0deepin1) unstable; urgency=medium
+
+  * New upstream version 2.6.16
+    - CVE-2025-12106
+    - CVE-2025-13086
+  * Drop d/patches/avoid-redefining-ovpn-enums.patch, applied upstream
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 21 Nov 2025 17:56:23 +0800
+
 openvpn (2.6.14-2) unstable; urgency=medium
 
   * Cherry-pick upstream fix to build with Kernel 6.16+ (Closes: #1114249)

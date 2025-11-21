@@ -274,6 +274,11 @@ configuration.
   counted as traffic, as they are used internally by OpenVPN and are not
   an indication of actual user activity.
 
+  NOTE: on FreeBSD with DCO, due to platform limits, the previous paragraph
+  is not correct.  In that case, encapsulation overhead and keepalives are
+  counted, so using this feature needs a sufficiently-high ``bytes`` value to
+  take these extra numbers into account.
+
 --proto-force p
   When iterating through connection profiles, only consider profiles using
   protocol ``p`` (:code:`tcp` \| :code:`udp`).
@@ -367,6 +372,7 @@ configuration.
     - bit 7: The client is capable of sending exit notification via control channel using ``EXIT`` message. Also, the client is accepting the protocol-flags pushed option for the EKM capability
     - bit 8: The client is capable of accepting ``AUTH_FAILED,TEMP`` messages
     - bit 9: The client is capable of dynamic tls-crypt
+    - bit 10: The client is capable of data epoch keys
 
   :code:`IV_NCP=2`
         Negotiable ciphers, client supports ``--cipher`` pushed by
@@ -544,12 +550,15 @@ configuration.
   Valid syntax:
   ::
 
-     static-challenge text echo
+     static-challenge text echo [format]
 
   The ``text`` challenge text is presented to the user which describes what
   information is requested.  The ``echo`` flag indicates if the user's
   input should be echoed on the screen.  Valid ``echo`` values are
-  :code:`0` or :code:`1`.
+  :code:`0` or :code:`1`. The optional ``format`` indicates whether
+  the password and response should be combined using the SCRV1 protocol
+  (``format`` = :code:`scrv1`) or simply concatenated (``format`` = :code:`concat`).
+  :code:`scrv1` is the default.
 
   See management-notes.txt in the OpenVPN distribution for a description of
   the OpenVPN challenge/response protocol.

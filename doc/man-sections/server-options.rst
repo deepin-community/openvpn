@@ -89,6 +89,12 @@ fast hardware. SSL/TLS authentication must be used in this mode.
   will lead to authentication bypass (as does returning success on a wrong
   password from a script).
 
+  **Note:** the username for ``--auth-gen-token`` can be overridden by
+  ``--override-user``. In this case the client will be pushed also the
+  ``--auth-token-user`` option and an auth token that is valid for that
+  username instead of the original username that the client authenticated
+  with.
+
 --auth-gen-token-secret file
   Specifies a file that holds a secret for the HMAC used in
   ``--auth-gen-token`` If ``file`` is not present OpenVPN will generate a
@@ -308,6 +314,10 @@ fast hardware. SSL/TLS authentication must be used in this mode.
   3.  Use ``--ifconfig-pool`` allocation for dynamic IP (last
       choice).
 
+  When DCO is enabled and the IP is not in contained in the network specified
+  by ``--ifconfig``, OpenVPN will install a /32 host route for the ``local``
+  IP address.
+
 --ifconfig-ipv6-push args
   for ``--client-config-dir`` per-client static IPv6 interface
   configuration, see ``--client-config-dir`` and ``--ifconfig-push`` for
@@ -317,6 +327,10 @@ fast hardware. SSL/TLS authentication must be used in this mode.
   ::
 
      ifconfig-ipv6-push ipv6addr/bits ipv6remote
+
+  When DCO is enabled and the IP is not in contained in the network specified
+  by ``--ifconfig-ipv6``, OpenVPN will install a /128 host route for the
+  ``ipv6addr`` IP address.
 
 --multihome
   Configure a multi-homed UDP server. This option needs to be used when a
@@ -399,18 +413,40 @@ fast hardware. SSL/TLS authentication must be used in this mode.
   Note that this directive affects OpenVPN's internal routing table, not
   the kernel routing table.
 
---opt-verify
-  **DEPRECATED** Clients that connect with options that are incompatible with
-  those of the server will be disconnected.
+--override-username username
+  Sets the username of a connection to the specified username.  This username
+  will also be used by ``--auth-gen-token``. However, the overridden
+  username comes only into effect *after* the ``--client-config-dir`` has been
+  read and the ``--auth-user-pass-verify`` and ``--client-connect`` scripts
+  have been run.
 
-  Options that will be compared for compatibility include ``dev-type``,
-  ``link-mtu``, ``tun-mtu``, ``proto``, ``ifconfig``,
-  ``comp-lzo``, ``fragment``, ``keydir``, ``cipher``,
-  ``auth``, ``keysize``, ``secret``, ``no-replay``,
-  ``tls-auth``, ``key-method``, ``tls-server``
-  and ``tls-client``.
+  Also ``--username-as-common-name`` will use the client provided username
+  as common-name. It is recommended to avoid the use of the
+  ``--override-username`` option if the option ``--username-as-common-name``
+  is being used.
 
-  This option requires that ``--disable-occ`` NOT be used.
+  The changed username will be picked up by the status output and also by
+  the ``--auth-gen-token`` option. It will also be pushed to the client
+  using ``--auth-token-user`` if ``--auth-gen-token`` is enabled.
+
+  Internally on all subsequent renegotiations the client provided username
+  will be replaced by the username provided by ``--override-username``.
+  If the client changes to a username that is different from both the initial
+  and the overridden username, the client will be rejected.
+
+  Special care should be taken that both the initial username of the client
+  and the overridden username are handled correctly when using
+  ``--override-username`` and the related options to avoid
+  authentication/authorisation bypasses.
+
+  This option is mainly intended for use cases that use certificates and
+  multi factor authentication and therefore do not provide a username that
+  can be used for ``--auth-gen-token`` to allow providing a username in
+  these scenarios.
+
+  If the ``--auth-token`` directive is pushed by another script/plugin or
+  management interface, consider also generating and pushing
+  ``--auth-token-user``.
 
 --port-share args
   Share OpenVPN TCP with another service
@@ -452,9 +488,12 @@ fast hardware. SSL/TLS authentication must be used in this mode.
   ``--route``, ``--route-gateway``, ``--route-delay``,
   ``--redirect-gateway``, ``--ip-win32``, ``--dhcp-option``, ``--dns``,
   ``--inactive``, ``--ping``, ``--ping-exit``, ``--ping-restart``,
-  ``--setenv``, ``--auth-token``, ``--persist-key``, ``--persist-tun``,
+  ``--setenv``, ``--auth-token``, ``--persist-tun``,
   ``--echo``, ``--comp-lzo``, ``--socket-flags``, ``--sndbuf``,
   ``--rcvbuf``, ``--session-timeout``
+
+  Note: using ``--push`` requires OpenVPN to run in ``--mode server`` (or
+  using of one of `--server`, `--server-bridge` helper directives).
 
 --push-remove opt
   Selectively remove all ``--push`` options matching "opt" from the option

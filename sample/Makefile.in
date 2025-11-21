@@ -21,10 +21,9 @@
 #             packet encryption, packet authentication, and
 #             packet compression.
 #
-#  Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>
+#  Copyright (C) 2002-2025 OpenVPN Inc <sales@openvpn.net>
 #  Copyright (C) 2006-2012 Alon Bar-Lev <alon.barlev@gmail.com>
 #
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -136,34 +135,6 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-  || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-       $(am__cd) "$$dir" && echo $$files | $(am__xargs_n) 40 $(am__rm_f); }; \
-  }
-am__installdirs = "$(DESTDIR)$(sampledir)"
-DATA = $(sample_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -190,6 +161,7 @@ DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 DL_LIBS = @DL_LIBS@
+DNS_UPDOWN_TYPE = @DNS_UPDOWN_TYPE@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -249,6 +221,10 @@ OPTIONAL_CRYPTO_LIBS = @OPTIONAL_CRYPTO_LIBS@
 OPTIONAL_DL_LIBS = @OPTIONAL_DL_LIBS@
 OPTIONAL_INOTIFY_CFLAGS = @OPTIONAL_INOTIFY_CFLAGS@
 OPTIONAL_INOTIFY_LIBS = @OPTIONAL_INOTIFY_LIBS@
+OPTIONAL_LIBCAPNG_CFLAGS = @OPTIONAL_LIBCAPNG_CFLAGS@
+OPTIONAL_LIBCAPNG_LIBS = @OPTIONAL_LIBCAPNG_LIBS@
+OPTIONAL_LIBNL_GENL_CFLAGS = @OPTIONAL_LIBNL_GENL_CFLAGS@
+OPTIONAL_LIBNL_GENL_LIBS = @OPTIONAL_LIBNL_GENL_LIBS@
 OPTIONAL_LZ4_CFLAGS = @OPTIONAL_LZ4_CFLAGS@
 OPTIONAL_LZ4_LIBS = @OPTIONAL_LZ4_LIBS@
 OPTIONAL_LZO_CFLAGS = @OPTIONAL_LZO_CFLAGS@
@@ -261,6 +237,7 @@ OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 P11KIT_CFLAGS = @P11KIT_CFLAGS@
 P11KIT_LIBS = @P11KIT_LIBS@
+P11TOOL = @P11TOOL@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -282,11 +259,14 @@ RC = @RC@
 ROUTE = @ROUTE@
 RST2HTML = @RST2HTML@
 RST2MAN = @RST2MAN@
+SCRIPTDIR = @SCRIPTDIR@
 SED = @SED@
 SELINUX_LIBS = @SELINUX_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SOCKETS_LIBS = @SOCKETS_LIBS@
+SOFTHSM2_MODULE = @SOFTHSM2_MODULE@
+SOFTHSM2_UTIL = @SOFTHSM2_UTIL@
 STRIP = @STRIP@
 SYSTEMD_ASK_PASSWORD = @SYSTEMD_ASK_PASSWORD@
 SYSTEMD_UNIT_DIR = @SYSTEMD_UNIT_DIR@
@@ -298,6 +278,7 @@ TEST_CFLAGS = @TEST_CFLAGS@
 TEST_LDFLAGS = @TEST_LDFLAGS@
 TMPFILES_DIR = @TMPFILES_DIR@
 VERSION = @VERSION@
+WINDMC = @WINDMC@
 WOLFSSL_CFLAGS = @WOLFSSL_CFLAGS@
 WOLFSSL_INCLUDEDIR = @WOLFSSL_INCLUDEDIR@
 WOLFSSL_LIBS = @WOLFSSL_LIBS@
@@ -308,6 +289,7 @@ abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_WINDMC = @ac_ct_WINDMC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -353,6 +335,7 @@ psdir = @psdir@
 runstatedir = @runstatedir@
 sampledir = @sampledir@
 sbindir = @sbindir@
+scriptdir = @scriptdir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -371,14 +354,8 @@ DISTCLEANFILES = \
 EXTRA_DIST = \
 	sample-plugins \
 	sample-config-files \
-	sample-windows \
 	sample-keys \
 	sample-scripts
-
-@WIN32_TRUE@sample_DATA = \
-@WIN32_TRUE@	client.ovpn \
-@WIN32_TRUE@	server.ovpn \
-@WIN32_TRUE@	sample-windows/sample.ovpn
 
 all: all-am
 
@@ -418,27 +395,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-sampleDATA: $(sample_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(sample_DATA)'; test -n "$(sampledir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(sampledir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(sampledir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(sampledir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(sampledir)" || exit $$?; \
-	done
-
-uninstall-sampleDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(sample_DATA)'; test -n "$(sampledir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(sampledir)'; $(am__uninstall_files_from_dir)
 tags TAGS:
 
 ctags CTAGS:
@@ -480,11 +436,8 @@ distdir-am: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(DATA)
+all-am: Makefile
 installdirs:
-	for dir in "$(DESTDIR)$(sampledir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -537,7 +490,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-sampleDATA
+install-data-am:
 
 install-dvi: install-dvi-am
 
@@ -581,7 +534,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-sampleDATA
+uninstall-am:
 
 .MAKE: install-am install-strip
 
@@ -592,20 +545,13 @@ uninstall-am: uninstall-sampleDATA
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
-	install-sampleDATA install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags-am uninstall uninstall-am uninstall-sampleDATA
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 
-
-@WIN32_TRUE@client.ovpn: sample-config-files/client.conf
-@WIN32_TRUE@	-rm -f client.ovpn
-@WIN32_TRUE@	cp "$(srcdir)/sample-config-files/client.conf" client.ovpn
-@WIN32_TRUE@server.ovpn: sample-config-files/server.conf
-@WIN32_TRUE@	-rm -f server.ovpn
-@WIN32_TRUE@	cp "$(srcdir)/sample-config-files/server.conf" server.ovpn
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

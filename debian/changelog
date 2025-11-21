@@ -1,3 +1,27 @@
+openvpn (2.7.0~rc2-2) unstable; urgency=medium
+
+  * New upstream version 2.7.0~rc2 to unstable
+    - CVE-2025-12106
+      IPv6 address parsing: fix buffer overread on invalid input
+    - CVE-2025-13086
+      HMAC verification check: fix incorrect memcmp() call (Closes: #1121086)
+
+  * Highlights from the 2.7 upstream release
+    - Multi-socket support for servers -- Handle multiple
+      addresses/ports/protocols within one server
+    - Support for new upstream DCO Linux kernel module
+      + replaces previous ovpn-dco-v2 out-of-tree kernel module with an
+        official kernel module available since Linux 6.16+
+
+ -- Bernhard Schmidt <berni@debian.org>  Thu, 20 Nov 2025 23:31:00 +0100
+
+openvpn (2.6.15-1) unstable; urgency=medium
+
+  * New upstream version 2.6.15 (Closes: #1118074)
+    - Drop Kernel 6.16+ fix applied upstream
+
+ -- Bernhard Schmidt <berni@debian.org>  Sun, 26 Oct 2025 16:32:43 +0100
+
 openvpn (2.6.14-2) unstable; urgency=medium
 
   * Cherry-pick upstream fix to build with Kernel 6.16+ (Closes: #1114249)

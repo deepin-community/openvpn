@@ -21,7 +21,7 @@
 #             packet encryption, packet authentication, and
 #             packet compression.
 #
-#  Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>
+#  Copyright (C) 2002-2025 OpenVPN Inc <sales@openvpn.net>
 #  Copyright (C) 2006-2012 Alon Bar-Lev <alon.barlev@gmail.com>
 #
 VPATH = @srcdir@
@@ -100,6 +100,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ENABLE_DNS_UPDOWN_TRUE@am__append_1 = dns-scripts
 subdir = distro
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_socklen_t.m4 \
@@ -168,7 +169,7 @@ am__define_uniq_tagged_files = \
   unique=`for i in $$list; do \
     if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
   done | $(am__uniquify_input)`
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = systemd dns-scripts
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
@@ -219,6 +220,7 @@ DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 DL_LIBS = @DL_LIBS@
+DNS_UPDOWN_TYPE = @DNS_UPDOWN_TYPE@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -278,6 +280,10 @@ OPTIONAL_CRYPTO_LIBS = @OPTIONAL_CRYPTO_LIBS@
 OPTIONAL_DL_LIBS = @OPTIONAL_DL_LIBS@
 OPTIONAL_INOTIFY_CFLAGS = @OPTIONAL_INOTIFY_CFLAGS@
 OPTIONAL_INOTIFY_LIBS = @OPTIONAL_INOTIFY_LIBS@
+OPTIONAL_LIBCAPNG_CFLAGS = @OPTIONAL_LIBCAPNG_CFLAGS@
+OPTIONAL_LIBCAPNG_LIBS = @OPTIONAL_LIBCAPNG_LIBS@
+OPTIONAL_LIBNL_GENL_CFLAGS = @OPTIONAL_LIBNL_GENL_CFLAGS@
+OPTIONAL_LIBNL_GENL_LIBS = @OPTIONAL_LIBNL_GENL_LIBS@
 OPTIONAL_LZ4_CFLAGS = @OPTIONAL_LZ4_CFLAGS@
 OPTIONAL_LZ4_LIBS = @OPTIONAL_LZ4_LIBS@
 OPTIONAL_LZO_CFLAGS = @OPTIONAL_LZO_CFLAGS@
@@ -290,6 +296,7 @@ OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 P11KIT_CFLAGS = @P11KIT_CFLAGS@
 P11KIT_LIBS = @P11KIT_LIBS@
+P11TOOL = @P11TOOL@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -311,11 +318,14 @@ RC = @RC@
 ROUTE = @ROUTE@
 RST2HTML = @RST2HTML@
 RST2MAN = @RST2MAN@
+SCRIPTDIR = @SCRIPTDIR@
 SED = @SED@
 SELINUX_LIBS = @SELINUX_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SOCKETS_LIBS = @SOCKETS_LIBS@
+SOFTHSM2_MODULE = @SOFTHSM2_MODULE@
+SOFTHSM2_UTIL = @SOFTHSM2_UTIL@
 STRIP = @STRIP@
 SYSTEMD_ASK_PASSWORD = @SYSTEMD_ASK_PASSWORD@
 SYSTEMD_UNIT_DIR = @SYSTEMD_UNIT_DIR@
@@ -327,6 +337,7 @@ TEST_CFLAGS = @TEST_CFLAGS@
 TEST_LDFLAGS = @TEST_LDFLAGS@
 TMPFILES_DIR = @TMPFILES_DIR@
 VERSION = @VERSION@
+WINDMC = @WINDMC@
 WOLFSSL_CFLAGS = @WOLFSSL_CFLAGS@
 WOLFSSL_INCLUDEDIR = @WOLFSSL_INCLUDEDIR@
 WOLFSSL_LIBS = @WOLFSSL_LIBS@
@@ -337,6 +348,7 @@ abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_WINDMC = @ac_ct_WINDMC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -382,6 +394,7 @@ psdir = @psdir@
 runstatedir = @runstatedir@
 sampledir = @sampledir@
 sbindir = @sbindir@
+scriptdir = @scriptdir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -394,7 +407,7 @@ top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = \
 	$(srcdir)/Makefile.in
 
-SUBDIRS = systemd
+SUBDIRS = systemd $(am__append_1)
 all: all-recursive
 
 .SUFFIXES:

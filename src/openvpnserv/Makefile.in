@@ -21,7 +21,7 @@
 #             packet encryption, packet authentication, and
 #             packet compression.
 #
-#  Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>
+#  Copyright (C) 2002-2025 OpenVPN Inc <sales@openvpn.net>
 #  Copyright (C) 2006-2012 Alon Bar-Lev <alon.barlev@gmail.com>
 #
 
@@ -35,6 +35,7 @@
 #  Copyright (C) 2008-2012 Alon Bar-Lev <alon.barlev@gmail.com>
 #
 # Required to build Windows resource file
+
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -135,7 +136,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_openvpnserv_OBJECTS = openvpnserv-common.$(OBJEXT) \
 	openvpnserv-interactive.$(OBJEXT) \
 	openvpnserv-service.$(OBJEXT) openvpnserv-validate.$(OBJEXT) \
-	$(top_builddir)/src/openvpn/openvpnserv-block_dns.$(OBJEXT) \
+	$(top_builddir)/src/openvpn/openvpnserv-wfp_block.$(OBJEXT) \
 	openvpnserv_resources.$(OBJEXT)
 openvpnserv_OBJECTS = $(am_openvpnserv_OBJECTS)
 openvpnserv_DEPENDENCIES =
@@ -161,7 +162,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po \
+am__depfiles_remade = $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po \
 	./$(DEPDIR)/openvpnserv-common.Po \
 	./$(DEPDIR)/openvpnserv-interactive.Po \
 	./$(DEPDIR)/openvpnserv-service.Po \
@@ -192,6 +193,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+DATA = $(noinst_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -209,8 +211,8 @@ am__define_uniq_tagged_files = \
   unique=`for i in $$list; do \
     if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
   done | $(am__uniquify_input)`
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/build/ltrc.inc \
-	$(top_srcdir)/depcomp
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
+	$(top_srcdir)/ltrc.inc
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -235,6 +237,7 @@ DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 DL_LIBS = @DL_LIBS@
+DNS_UPDOWN_TYPE = @DNS_UPDOWN_TYPE@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -294,6 +297,10 @@ OPTIONAL_CRYPTO_LIBS = @OPTIONAL_CRYPTO_LIBS@
 OPTIONAL_DL_LIBS = @OPTIONAL_DL_LIBS@
 OPTIONAL_INOTIFY_CFLAGS = @OPTIONAL_INOTIFY_CFLAGS@
 OPTIONAL_INOTIFY_LIBS = @OPTIONAL_INOTIFY_LIBS@
+OPTIONAL_LIBCAPNG_CFLAGS = @OPTIONAL_LIBCAPNG_CFLAGS@
+OPTIONAL_LIBCAPNG_LIBS = @OPTIONAL_LIBCAPNG_LIBS@
+OPTIONAL_LIBNL_GENL_CFLAGS = @OPTIONAL_LIBNL_GENL_CFLAGS@
+OPTIONAL_LIBNL_GENL_LIBS = @OPTIONAL_LIBNL_GENL_LIBS@
 OPTIONAL_LZ4_CFLAGS = @OPTIONAL_LZ4_CFLAGS@
 OPTIONAL_LZ4_LIBS = @OPTIONAL_LZ4_LIBS@
 OPTIONAL_LZO_CFLAGS = @OPTIONAL_LZO_CFLAGS@
@@ -306,6 +313,7 @@ OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 P11KIT_CFLAGS = @P11KIT_CFLAGS@
 P11KIT_LIBS = @P11KIT_LIBS@
+P11TOOL = @P11TOOL@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -327,11 +335,14 @@ RC = @RC@
 ROUTE = @ROUTE@
 RST2HTML = @RST2HTML@
 RST2MAN = @RST2MAN@
+SCRIPTDIR = @SCRIPTDIR@
 SED = @SED@
 SELINUX_LIBS = @SELINUX_LIBS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SOCKETS_LIBS = @SOCKETS_LIBS@
+SOFTHSM2_MODULE = @SOFTHSM2_MODULE@
+SOFTHSM2_UTIL = @SOFTHSM2_UTIL@
 STRIP = @STRIP@
 SYSTEMD_ASK_PASSWORD = @SYSTEMD_ASK_PASSWORD@
 SYSTEMD_UNIT_DIR = @SYSTEMD_UNIT_DIR@
@@ -343,6 +354,7 @@ TEST_CFLAGS = @TEST_CFLAGS@
 TEST_LDFLAGS = @TEST_LDFLAGS@
 TMPFILES_DIR = @TMPFILES_DIR@
 VERSION = @VERSION@
+WINDMC = @WINDMC@
 WOLFSSL_CFLAGS = @WOLFSSL_CFLAGS@
 WOLFSSL_INCLUDEDIR = @WOLFSSL_INCLUDEDIR@
 WOLFSSL_LIBS = @WOLFSSL_LIBS@
@@ -353,6 +365,7 @@ abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_WINDMC = @ac_ct_WINDMC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -398,6 +411,7 @@ psdir = @psdir@
 runstatedir = @runstatedir@
 sampledir = @sampledir@
 sbindir = @sbindir@
+scriptdir = @scriptdir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -423,21 +437,30 @@ EXTRA_DIST = \
 @WIN32_TRUE@	-UNTDDI_VERSION -U_WIN32_WINNT \
 @WIN32_TRUE@	-D_WIN32_WINNT=_WIN32_WINNT_VISTA
 
-@WIN32_TRUE@openvpnserv_LDADD = -ladvapi32 -luserenv -liphlpapi -lfwpuclnt -lrpcrt4 -lshlwapi -lnetapi32 -lws2_32 -lntdll
+@WIN32_TRUE@openvpnserv_LDADD = \
+@WIN32_TRUE@	-ladvapi32 -luserenv -liphlpapi -lfwpuclnt -lrpcrt4 \
+@WIN32_TRUE@	-lshlwapi -lnetapi32 -lws2_32 -lntdll -lole32 -lpathcch
+
+@WIN32_TRUE@noinst_DATA = \
+@WIN32_TRUE@	MSG00409.bin eventmsg.h eventmsg.rc openvpnservmsg.dll
+
+@WIN32_TRUE@BUILT_SOURCES = \
+@WIN32_TRUE@	eventmsg.h
+
 openvpnserv_SOURCES = \
         common.c \
 	interactive.c \
 	service.c service.h \
 	validate.c validate.h \
-	$(top_srcdir)/src/openvpn/block_dns.c $(top_srcdir)/src/openvpn/block_dns.h \
-	openvpnserv_resources.rc \
-	$(top_srcdir)/src/openvpn/ring_buffer.h
+	$(top_srcdir)/src/openvpn/wfp_block.c $(top_srcdir)/src/openvpn/wfp_block.h \
+	openvpnserv_resources.rc
 
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .mc .o .obj .rc
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/build/ltrc.inc $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/ltrc.inc $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -457,7 +480,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles);; \
 	esac;
-$(top_srcdir)/build/ltrc.inc $(am__empty):
+$(top_srcdir)/ltrc.inc $(am__empty):
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -517,7 +540,7 @@ $(top_builddir)/src/openvpn/$(am__dirstamp):
 $(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) $(top_builddir)/src/openvpn/$(DEPDIR)
 	@: >>$(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp)
-$(top_builddir)/src/openvpn/openvpnserv-block_dns.$(OBJEXT):  \
+$(top_builddir)/src/openvpn/openvpnserv-wfp_block.$(OBJEXT):  \
 	$(top_builddir)/src/openvpn/$(am__dirstamp) \
 	$(top_builddir)/src/openvpn/$(DEPDIR)/$(am__dirstamp)
 
@@ -532,7 +555,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@$(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openvpnserv-common.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openvpnserv-interactive.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openvpnserv-service.Po@am__quote@ # am--include-marker
@@ -624,19 +647,19 @@ openvpnserv-validate.obj: validate.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -c -o openvpnserv-validate.obj `if test -f 'validate.c'; then $(CYGPATH_W) 'validate.c'; else $(CYGPATH_W) '$(srcdir)/validate.c'; fi`
 
-$(top_builddir)/src/openvpn/openvpnserv-block_dns.o: $(top_builddir)/src/openvpn/block_dns.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/openvpnserv-block_dns.o -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Tpo -c -o $(top_builddir)/src/openvpn/openvpnserv-block_dns.o `test -f '$(top_builddir)/src/openvpn/block_dns.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/block_dns.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/block_dns.c' object='$(top_builddir)/src/openvpn/openvpnserv-block_dns.o' libtool=no @AMDEPBACKSLASH@
+$(top_builddir)/src/openvpn/openvpnserv-wfp_block.o: $(top_builddir)/src/openvpn/wfp_block.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/openvpnserv-wfp_block.o -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Tpo -c -o $(top_builddir)/src/openvpn/openvpnserv-wfp_block.o `test -f '$(top_builddir)/src/openvpn/wfp_block.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/wfp_block.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/wfp_block.c' object='$(top_builddir)/src/openvpn/openvpnserv-wfp_block.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/openvpnserv-block_dns.o `test -f '$(top_builddir)/src/openvpn/block_dns.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/block_dns.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/openvpnserv-wfp_block.o `test -f '$(top_builddir)/src/openvpn/wfp_block.c' || echo '$(srcdir)/'`$(top_builddir)/src/openvpn/wfp_block.c
 
-$(top_builddir)/src/openvpn/openvpnserv-block_dns.obj: $(top_builddir)/src/openvpn/block_dns.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/openvpnserv-block_dns.obj -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Tpo -c -o $(top_builddir)/src/openvpn/openvpnserv-block_dns.obj `if test -f '$(top_builddir)/src/openvpn/block_dns.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/block_dns.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/block_dns.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/block_dns.c' object='$(top_builddir)/src/openvpn/openvpnserv-block_dns.obj' libtool=no @AMDEPBACKSLASH@
+$(top_builddir)/src/openvpn/openvpnserv-wfp_block.obj: $(top_builddir)/src/openvpn/wfp_block.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -MT $(top_builddir)/src/openvpn/openvpnserv-wfp_block.obj -MD -MP -MF $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Tpo -c -o $(top_builddir)/src/openvpn/openvpnserv-wfp_block.obj `if test -f '$(top_builddir)/src/openvpn/wfp_block.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/wfp_block.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/wfp_block.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Tpo $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$(top_builddir)/src/openvpn/wfp_block.c' object='$(top_builddir)/src/openvpn/openvpnserv-wfp_block.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/openvpnserv-block_dns.obj `if test -f '$(top_builddir)/src/openvpn/block_dns.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/block_dns.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/block_dns.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(openvpnserv_CFLAGS) $(CFLAGS) -c -o $(top_builddir)/src/openvpn/openvpnserv-wfp_block.obj `if test -f '$(top_builddir)/src/openvpn/wfp_block.c'; then $(CYGPATH_W) '$(top_builddir)/src/openvpn/wfp_block.c'; else $(CYGPATH_W) '$(srcdir)/$(top_builddir)/src/openvpn/wfp_block.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -729,14 +752,17 @@ distdir-am: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
-all-am: Makefile $(PROGRAMS)
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
+all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs:
 	for dir in "$(DESTDIR)$(sbindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
-install-exec: install-exec-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
+install-exec: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
 
@@ -767,6 +793,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-$(am__rm_f) $(BUILT_SOURCES)
 	-$(am__rm_f) $(MAINTAINERCLEANFILES)
 clean: clean-am
 
@@ -774,7 +801,7 @@ clean-am: clean-generic clean-libtool clean-sbinPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po
+	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-common.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-interactive.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-service.Po
@@ -824,7 +851,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-block_dns.Po
+	-rm -f $(top_builddir)/src/openvpn/$(DEPDIR)/openvpnserv-wfp_block.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-common.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-interactive.Po
 	-rm -f ./$(DEPDIR)/openvpnserv-service.Po
@@ -847,7 +874,7 @@ ps-am:
 
 uninstall-am: uninstall-sbinPROGRAMS
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-exec install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-generic clean-libtool clean-sbinPROGRAMS cscopelist-am \
@@ -874,6 +901,14 @@ uninstall-am: uninstall-sbinPROGRAMS
 
 .mc.rc:
 	$(WINDMC) "$<"
+
+openvpnservmsg.dll: eventmsg.o
+	$(CC) -shared -Wl,--entry=0 -nostdlib -nostartfiles -o $@ $<
+
+eventmsg.o: eventmsg.rc
+
+eventmsg.h: eventmsg.mc
+	$(WINDMC) -U $<
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

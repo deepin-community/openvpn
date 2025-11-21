@@ -35,7 +35,6 @@ Depends:
 Suggests:
  openssl,
  resolvconf,
- openvpn-dco-dkms,
  openvpn-systemd-resolved,
 Recommends: easy-rsa
 Description: virtual private network daemon

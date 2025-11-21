@@ -5,7 +5,7 @@
  *             packet encryption, packet authentication, and
  *             packet compression.
  *
- *  Copyright (C) 2002-2024 OpenVPN Inc <sales@openvpn.net>
+ *  Copyright (C) 2002-2025 OpenVPN Inc <sales@openvpn.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License version 2
@@ -17,8 +17,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *  with this program; if not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef SYSHEAD_H
@@ -29,30 +28,30 @@
 
 /* branch prediction hints */
 #if defined(__GNUC__)
-#define likely(x)       __builtin_expect((x), 1)
-#define unlikely(x)     __builtin_expect((x), 0)
+#define likely(x)   __builtin_expect((x), 1)
+#define unlikely(x) __builtin_expect((x), 0)
 #else
-#define likely(x)      (x)
-#define unlikely(x)    (x)
+#define likely(x)   (x)
+#define unlikely(x) (x)
 #endif
 
 #ifdef _WIN32
 #include <windows.h>
 #include <winsock2.h>
 #include <tlhelp32.h>
-#define sleep(x) Sleep((x)*1000)
-#define random rand
-#define srandom srand
+#define sleep(x) Sleep((x) * 1000)
+#define random   rand
+#define srandom  srand
 #endif
 
-#ifdef _MSC_VER /* Visual Studio */
+#if defined(_MSC_VER) && !defined(__clang__) /* Microsoft compiler */
 #define __func__ __FUNCTION__
 #define __attribute__(x)
 #endif
 
 #if defined(__APPLE__)
 #if __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ >= 1070
-#define __APPLE_USE_RFC_3542  1
+#define __APPLE_USE_RFC_3542 1
 #endif
 #endif
 
@@ -166,6 +165,12 @@
 #include <string.h>
 #endif
 
+#if defined(TARGET_HAIKU)
+#include <SupportDefs.h> /* uint32, etc */
+#include <net/if.h>      /* ifconf etc */
+#include <sys/sockio.h>  /* SIOCGRTTABLE, etc */
+#endif                   /* TARGET_HAIKU */
+
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif
@@ -178,7 +183,7 @@
 #include <net/if_tap.h>
 #endif
 
-#if defined(TARGET_LINUX) || defined (TARGET_ANDROID)
+#if defined(TARGET_LINUX) || defined(TARGET_ANDROID)
 
 #ifdef HAVE_LINUX_IF_TUN_H
 #include <linux/if_tun.h>
@@ -221,10 +226,6 @@
 #include <sys/sockio.h>
 #endif
 
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
-#endif
-
 #ifdef HAVE_NETINET_IP_H
 #include <netinet/ip.h>
 #endif
@@ -239,10 +240,6 @@
 
 #ifdef HAVE_SYS_UIO_H
 #include <sys/uio.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
 #endif
 
 #ifdef HAVE_NETINET_IP_H
@@ -263,10 +260,6 @@
 
 #ifdef HAVE_SYS_UIO_H
 #include <sys/uio.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
 #endif
 
 #ifdef HAVE_NETINET_IP_H
@@ -299,10 +292,6 @@
 
 #ifdef HAVE_SYS_UIO_H
 #include <sys/uio.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
 #endif
 
 #ifdef HAVE_NETINET_IP_H
@@ -384,7 +373,9 @@ typedef int MIB_TCP_STATE;
  * Does this platform support linux-style IP_PKTINFO
  * or bsd-style IP_RECVDSTADDR ?
  */
-#if ((defined(HAVE_IN_PKTINFO) && defined(IP_PKTINFO)) || defined(IP_RECVDSTADDR)) && defined(HAVE_MSGHDR) && defined(HAVE_CMSGHDR) && defined(CMSG_FIRSTHDR) && defined(CMSG_NXTHDR) && defined(HAVE_RECVMSG) && defined(HAVE_SENDMSG)
+#if ((defined(HAVE_IN_PKTINFO) && defined(IP_PKTINFO)) || defined(IP_RECVDSTADDR)) \
+    && defined(HAVE_MSGHDR) && defined(HAVE_CMSGHDR) && defined(CMSG_FIRSTHDR)     \
+    && defined(CMSG_NXTHDR) && defined(HAVE_RECVMSG) && defined(HAVE_SENDMSG)
 #define ENABLE_IP_PKTINFO 1
 #else
 #define ENABLE_IP_PKTINFO 0
@@ -433,10 +424,10 @@ typedef unsigned short sa_family_t;
  * Directory separation char
  */
 #ifdef _WIN32
-#define PATH_SEPARATOR '\\'
+#define PATH_SEPARATOR     '\\'
 #define PATH_SEPARATOR_STR "\\"
 #else
-#define PATH_SEPARATOR '/'
+#define PATH_SEPARATOR     '/'
 #define PATH_SEPARATOR_STR "/"
 #endif
 
@@ -445,11 +436,11 @@ typedef unsigned short sa_family_t;
  */
 #ifdef _WIN32
 #define SOCKET_UNDEFINED (INVALID_SOCKET)
-#define SOCKET_PRINTF "%" PRIxPTR
+#define SOCKET_PRINTF    "%" PRIxPTR
 typedef SOCKET socket_descriptor_t;
 #else
 #define SOCKET_UNDEFINED (-1)
-#define SOCKET_PRINTF "%d"
+#define SOCKET_PRINTF    "%d"
 typedef int socket_descriptor_t;
 #endif
 
@@ -470,7 +461,9 @@ socket_defined(const socket_descriptor_t sd)
 /*
  * HTTPS port sharing capability
  */
-#if defined(ENABLE_PORT_SHARE) && defined(SCM_RIGHTS) && defined(HAVE_MSGHDR) && defined(HAVE_CMSGHDR) && defined(CMSG_FIRSTHDR) && defined(CMSG_NXTHDR) && defined(HAVE_RECVMSG) && defined(HAVE_SENDMSG)
+#if defined(ENABLE_PORT_SHARE) && defined(SCM_RIGHTS) && defined(HAVE_MSGHDR)  \
+    && defined(HAVE_CMSGHDR) && defined(CMSG_FIRSTHDR) && defined(CMSG_NXTHDR) \
+    && defined(HAVE_RECVMSG) && defined(HAVE_SENDMSG)
 #define PORT_SHARE 1
 #else
 #define PORT_SHARE 0
@@ -492,7 +485,9 @@ socket_defined(const socket_descriptor_t sd)
 /*
  * Should we include NTLM proxy functionality
  */
+#ifdef ENABLE_NTLM
 #define NTLM 1
+#endif
 
 /*
  * Should we include proxy digest auth functionality
@@ -502,8 +497,7 @@ socket_defined(const socket_descriptor_t sd)
 /*
  * Do we have CryptoAPI capability?
  */
-#if defined(_WIN32) && defined(ENABLE_CRYPTO_OPENSSL)    \
-    && !defined(ENABLE_CRYPTO_WOLFSSL)
+#if defined(_WIN32) && defined(ENABLE_CRYPTO_OPENSSL) && !defined(ENABLE_CRYPTO_WOLFSSL)
 #define ENABLE_CRYPTOAPI
 #endif
 
@@ -530,16 +524,14 @@ socket_defined(const socket_descriptor_t sd)
 /*
  * Compression support
  */
-#if defined(ENABLE_LZO) || defined(ENABLE_LZ4)    \
-    || defined(ENABLE_COMP_STUB)
+#if defined(ENABLE_LZO) || defined(ENABLE_LZ4) || defined(ENABLE_COMP_STUB)
 #define USE_COMP
 #endif
 
-/*
- * Enable --memstats option
- */
-#ifdef TARGET_LINUX
-#define ENABLE_MEMSTATS
+#ifdef _MSC_VER
+#ifndef PATH_MAX
+#define PATH_MAX MAX_PATH
+#endif
 #endif
 
 #endif /* ifndef SYSHEAD_H */

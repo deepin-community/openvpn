@@ -36,6 +36,9 @@
 /* Enable debugging support */
 #undef ENABLE_DEBUG
 
+/* Enable dns-updown hook by default */
+#undef ENABLE_DNS_UPDOWN_BY_DEFAULT
+
 /* We have persist tun capability */
 #undef ENABLE_FEATURE_TUN_PERSIST
 
@@ -53,6 +56,9 @@
 
 /* Enable management server capability */
 #undef ENABLE_MANAGEMENT
+
+/* Enable NTLMv2 proxy support */
+#undef ENABLE_NTLM
 
 /* Enable OFB and CFB cipher modes */
 #undef ENABLE_OFB_CFB_MODE
@@ -86,9 +92,6 @@
 
 /* Define to 1 if you have the 'access' function. */
 #undef HAVE_ACCESS
-
-/* Compiler supports anonymous unions */
-#undef HAVE_ANONYMOUS_UNION_SUPPORT
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
@@ -171,9 +174,6 @@
 
 /* Define to 1 if you have the 'execve' function. */
 #undef HAVE_EXECVE
-
-/* Crypto library supports keying material exporter */
-#undef HAVE_EXPORT_KEYING_MATERIAL
 
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
@@ -259,25 +259,17 @@
 /* Define to 1 if you have the <lzo/lzo1x.h> header file. */
 #undef HAVE_LZO_LZO1X_H
 
-/* Define to 1 if you have the 'mbedtls_cipher_check_tag' function. */
-#undef HAVE_MBEDTLS_CIPHER_CHECK_TAG
-
-/* Define to 1 if you have the 'mbedtls_cipher_write_tag' function. */
-#undef HAVE_MBEDTLS_CIPHER_WRITE_TAG
-
 /* Use mbedtls_ctr_drbg_update_ret from mbed TLS */
 #undef HAVE_MBEDTLS_CTR_DRBG_UPDATE_RET
 
-/* no */
-#undef HAVE_MBEDTLS_PSA_CRYPTO_H
-
-/* no */
+/* Define to 1 if you have the 'mbedtls_ssl_conf_export_keys_ext_cb' function.
+   */
 #undef HAVE_MBEDTLS_SSL_CONF_EXPORT_KEYS_EXT_CB
 
-/* no */
+/* Define to 1 if you have the 'mbedtls_ssl_set_export_keys_cb' function. */
 #undef HAVE_MBEDTLS_SSL_SET_EXPORT_KEYS_CB
 
-/* no */
+/* Define to 1 if you have the 'mbedtls_ssl_tls_prf' function. */
 #undef HAVE_MBEDTLS_SSL_TLS_PRF
 
 /* Define to 1 if you have the <minix/config.h> header file. */
@@ -295,9 +287,6 @@
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
 
-/* Define to 1 if you have the <netinet/in_systm.h> header file. */
-#undef HAVE_NETINET_IN_SYSTM_H
-
 /* Define to 1 if you have the <netinet/ip.h> header file. */
 #undef HAVE_NETINET_IP_H
 
@@ -312,9 +301,6 @@
 
 /* Define to 1 if you have the <net/if_tun.h> header file. */
 #undef HAVE_NET_IF_TUN_H
-
-/* Define to 1 if you have the <net/if_utun.h> header file. */
-#undef HAVE_NET_IF_UTUN_H
 
 /* Define to 1 if you have the <net/tun/if_tun.h> header file. */
 #undef HAVE_NET_TUN_IF_TUN_H
@@ -331,11 +317,11 @@
 /* Define to 1 if you have the <poll.h> header file. */
 #undef HAVE_POLL_H
 
+/* Define to 1 if you have the <psa/crypto.h> header file. */
+#undef HAVE_PSA_CRYPTO_H
+
 /* Define to 1 if you have the <pwd.h> header file. */
 #undef HAVE_PWD_H
-
-/* Define to 1 if you have the 'readv' function. */
-#undef HAVE_READV
 
 /* Define to 1 if you have the 'recvmsg' function. */
 #undef HAVE_RECVMSG
@@ -472,9 +458,6 @@
 /* Define to 1 if 'vfork' works. */
 #undef HAVE_WORKING_VFORK
 
-/* Define to 1 if you have the 'writev' function. */
-#undef HAVE_WRITEV
-
 /* Path to ifconfig tool */
 #undef IFCONFIG_PATH
 
@@ -495,6 +478,9 @@
 
 /* Version in windows resource format */
 #undef OPENVPN_VERSION_RESOURCE
+
+/* Path to p11tool */
+#undef P11TOOL_PATH
 
 /* Name of package */
 #undef PACKAGE
@@ -544,6 +530,12 @@
 /* The size of 'unsigned long', as computed by sizeof. */
 #undef SIZEOF_UNSIGNED_LONG
 
+/* Path to softhsm2 module */
+#undef SOFTHSM2_MODULE_PATH
+
+/* Path to softhsm2-util */
+#undef SOFTHSM2_UTIL_PATH
+
 /* Define to 1 if all of the C89 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
    backward compatibility; new code need not use it. */
@@ -578,6 +570,9 @@
 
 /* Are we running on FreeBSD? */
 #undef TARGET_FREEBSD
+
+/* Are we running Haiku? */
+#undef TARGET_HAIKU
 
 /* Are we running on Linux? */
 #undef TARGET_LINUX
@@ -701,9 +696,6 @@
 /* Use custom user_settings.h file for wolfSSL library */
 #undef WOLFSSL_USER_SETTINGS
 
-/* Define to empty if 'const' does not conform to ANSI C. */
-#undef const
-
 /* Define as 'int' if <sys/types.h> doesn't define. */
 #undef gid_t
 
@@ -736,7 +728,3 @@
 
 /* Define as 'fork' if 'vfork' does not work. */
 #undef vfork
-
-/* Define to empty if the keyword 'volatile' does not work. Warning: valid
-   code using 'volatile' can become incorrect without. Disable with care. */
-#undef volatile

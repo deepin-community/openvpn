@@ -143,12 +143,12 @@ am__openvpn_SOURCES_DIST = argv.c argv.h auth_token.c auth_token.h \
 	crypto_openssl.h crypto_mbedtls.c crypto_mbedtls.h dco.c dco.h \
 	dco_internal.h dco_freebsd.c dco_freebsd.h dco_linux.c \
 	dco_linux.h dco_win.c dco_win.h dhcp.c dhcp.h dns.c dns.h \
-	env_set.c env_set.h errlevel.h error.c error.h event.c event.h \
-	fdmisc.c fdmisc.h forward.c forward.h fragment.c fragment.h \
-	gremlin.c gremlin.h helper.c helper.h httpdigest.c \
-	httpdigest.h lladdr.c lladdr.h init.c init.h integer.h \
-	interval.c interval.h list.c list.h lzo.c lzo.h manage.c \
-	manage.h mbuf.c mbuf.h memdbg.h misc.c misc.h \
+	domain_helper.h env_set.c env_set.h errlevel.h error.c error.h \
+	event.c event.h fdmisc.c fdmisc.h forward.c forward.h \
+	fragment.c fragment.h gremlin.c gremlin.h helper.c helper.h \
+	httpdigest.c httpdigest.h lladdr.c lladdr.h init.c init.h \
+	integer.h interval.c interval.h list.c list.h lzo.c lzo.h \
+	manage.c manage.h mbuf.c mbuf.h memdbg.h misc.c misc.h \
 	ovpn_dco_freebsd.h ovpn_dco_linux.h ovpn_dco_win.h platform.c \
 	platform.h console.c console.h console_builtin.c \
 	console_systemd.c mbedtls_compat.h mroute.c mroute.h mss.c \
@@ -461,6 +461,7 @@ TEST_CFLAGS = @TEST_CFLAGS@
 TEST_LDFLAGS = @TEST_LDFLAGS@
 TMPFILES_DIR = @TMPFILES_DIR@
 VERSION = @VERSION@
+WINDMC = @WINDMC@
 WOLFSSL_CFLAGS = @WOLFSSL_CFLAGS@
 WOLFSSL_INCLUDEDIR = @WOLFSSL_INCLUDEDIR@
 WOLFSSL_LIBS = @WOLFSSL_LIBS@
@@ -471,6 +472,7 @@ abs_top_srcdir = @abs_top_srcdir@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_WINDMC = @ac_ct_WINDMC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -550,12 +552,12 @@ openvpn_SOURCES = argv.c argv.h auth_token.c auth_token.h base64.c \
 	crypto_openssl.h crypto_mbedtls.c crypto_mbedtls.h dco.c dco.h \
 	dco_internal.h dco_freebsd.c dco_freebsd.h dco_linux.c \
 	dco_linux.h dco_win.c dco_win.h dhcp.c dhcp.h dns.c dns.h \
-	env_set.c env_set.h errlevel.h error.c error.h event.c event.h \
-	fdmisc.c fdmisc.h forward.c forward.h fragment.c fragment.h \
-	gremlin.c gremlin.h helper.c helper.h httpdigest.c \
-	httpdigest.h lladdr.c lladdr.h init.c init.h integer.h \
-	interval.c interval.h list.c list.h lzo.c lzo.h manage.c \
-	manage.h mbuf.c mbuf.h memdbg.h misc.c misc.h \
+	domain_helper.h env_set.c env_set.h errlevel.h error.c error.h \
+	event.c event.h fdmisc.c fdmisc.h forward.c forward.h \
+	fragment.c fragment.h gremlin.c gremlin.h helper.c helper.h \
+	httpdigest.c httpdigest.h lladdr.c lladdr.h init.c init.h \
+	integer.h interval.c interval.h list.c list.h lzo.c lzo.h \
+	manage.c manage.h mbuf.c mbuf.h memdbg.h misc.c misc.h \
 	ovpn_dco_freebsd.h ovpn_dco_linux.h ovpn_dco_win.h platform.c \
 	platform.h console.c console.h console_builtin.c \
 	console_systemd.c mbedtls_compat.h mroute.c mroute.h mss.c \

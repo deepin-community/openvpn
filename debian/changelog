@@ -1,3 +1,10 @@
+openvpn (2.6.14-3deepin1) unstable; urgency=medium
+
+  * CVE-2025-13086: Fix inverted memcmp check for HMAC verification in the
+    3-way handshake, which allowed source IP address validation bypass.
+
+ -- deepin-ci-robot <packages@deepin.org>  Sat, 17 May 2026 02:45:00 +0800
+
 openvpn (2.6.14-2) unstable; urgency=medium
 
   * Cherry-pick upstream fix to build with Kernel 6.16+ (Closes: #1114249)

@@ -1,9 +1,27 @@
-openvpn (2.6.14-2) unstable; urgency=medium
+openvpn (2.6.14-1+deb13u2) trixie-security; urgency=medium
 
-  * Cherry-pick upstream fix to build with Kernel 6.16+ (Closes: #1114249)
-  * d/control: Set homepage to the community (open-source) subpage
+  * Cherry-pick upstream security patches
+    - CVE-2026-40215: fix race condition in TLS handshake that could lead to
+      leaking of packet data from a previous handshake under specific
+      circumstances
+    - CVE-2026-35058: fix server ASSERT() on receiving a suitably malformed
+      packet with a valid tls-crypt-v2 key
 
- -- Bernhard Schmidt <berni@debian.org>  Fri, 05 Sep 2025 22:13:12 +0200
+ -- Bernhard Schmidt <berni@debian.org>  Mon, 27 Apr 2026 09:22:24 +0200
+
+openvpn (2.6.14-1+deb13u1) trixie-security; urgency=medium
+
+  * Cherry-pick patches for CVE-2025-13086
+    - check-message-id.patch: Check message id/acked ids too when doing
+      sessionid cookie checks - bugfix for floating client problem, code
+      prequesite for the CVE patch to apply
+    - CVE-2025-13086.patch: Fix memcmp check for the hmac verification in the
+      3way handshake being inverted (Closes: #1121086)
+  * fix-ftbfs-kernel-6.16.patch: Fix compilation against 6.16+ kernel
+    headers (Closes: #1114249)
+  * d/gbp.conf: set debian-branch for trixie
+
+ -- Bernhard Schmidt <berni@debian.org>  Fri, 21 Nov 2025 00:45:17 +0100
 
 openvpn (2.6.14-1) unstable; urgency=medium
 

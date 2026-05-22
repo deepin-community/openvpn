@@ -2,4 +2,8 @@ move_log_dir.patch
 auth-pam_libpam_so_filename.patch
 #debian_nogroup_for_sample_files.patch
 openvpn-pkcs11warn.patch
-avoid-redefining-ovpn-enums.patch
+fix-ftbfs-kernel-6.16.patch
+check-message-id.patch
+CVE-2025-13086.patch
+CVE-2026-35058.patch
+CVE-2026-40215.patch

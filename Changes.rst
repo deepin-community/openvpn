@@ -1,3 +1,129 @@
+Overview of changes in 2.6.20
+=============================
+Security fixes
+--------------
+- fix race condition in TLS handshake that could lead to leaking of
+  packet data from a previous handshake under specific circumstances
+  (CVE-2026-40215)
+
+  (Bug found by XlabAI Team of Tencent Xuanwu Lab (xlabai@tencent.com))
+
+- fix server ASSERT() on receiving a suitably malformed packet with
+  a valid tls-crypt-v2 key (CVE-2026-35058)
+
+  (Bug found by XlabAI Team of Tencent Xuanwu Lab (xlabai@tencent.com),
+   and independently by Emma Reuter of Cisco ASIG (TALOS-2026-2381))
+
+Bugfixes
+--------
+- management: stop periodic bytecount output on mgmt client disconnection
+
+- FreeBSD: make DCO work on systems with no IPv4 support
+
+- FreeBSD: fix compilation with --enable-async-push on FreeBSD 15
+
+- Linux: make DCO work on big endian architectures (MIPS, PowerPC)
+
+- Windows: fix deinstallation progress bar on adapter deletion.
+
+- Linux: fix problem with DCO kernel notifications getting lost, leading
+  to overcounting of number of connected clients and general confusion
+  between kernel and userland regarding peer status (Github #900, #918,
+  #931, #919, #945) - this is a backport of the fixes in 2.7 plus the
+  infrastructural changes around DCO needed to support it.
+
+Documentation updates
+---------------------
+- fix ``client-nat`` syntax and examples
+
+Code maintenance / Compat changes
+---------------------------------
+- adjust some 'const' qualifiers to ISO C23 updates in glibc-2.43
+  (namely some strstr(), strchr() and strrchr() uses)
+
+
+Overview of changes in 2.6.19
+=============================
+Bugfixes
+--------
+- ``make dist`` would fail to pack unit_tests/openvpn/test_common.h,
+  breaking ``make check`` on the tarball if cmocka is installed.  Fix.
+
+Overview of changes in 2.6.18
+=============================
+
+New features / User visible changes
+-----------------------------------
+- disable DCO if ``--bind-dev`` option is given (no support for this in
+  the old out-of-kernel Linux DCO implementation)
+
+- on Windows, if using ``--ip-win32 netsh`` and not using the interactive
+  service, IPv4 addresses would be installed as "permanent", possibly
+  causing problems later on with using that IPv4 address on a different
+  interface.  Change to "store=active".  (GH: #915)
+
+
+Code maintenance / Compat changes
+---------------------------------
+- backport fixes needed to build unit tests with cmocka 2.0.0 and -Werror
+  (some parts of the old API have been deprecated and would raise warnings)
+
+- backport "ensure that all unit tests use unbuffered stdout+stderr" change,
+  otherwise we get no output at all if a unit test crashes
+
+- add explicit error message for failing read in multi_process_file_closed()
+  (reported by SRL)
+
+- test framework: permit overriding the openvpn binary called
+
+- configure.ac: remove use of PKCS11_HELPER_LIBS in mbedTLS checks
+  (old code, purpose unclear, effects non-useful)
+
+- configure.ac: try to use pkg-config to detect mbedTLS
+
+
+Documentation updates
+---------------------
+- improve pull-filter documentation, emphasizing possible problems if
+  used as a naive security measure (reported by SRLabs).
+
+
+Bugfixes
+--------
+- p2mp server: fix incorrect file descriptor handling on "inotify" FD
+  during a SIGUSR1 restart (GH: #966)
+
+- management interface: fix bug where ``--management-forget-disconnect``
+  and ``--management-signal`` could be executed even if password authentication
+  to managment interface was still pending (Zeropath finding)
+
+- repair client-side interaction on reconnect between DCO event handling
+  and ``--persist-tun`` - after a ping timeout and reconnect, the DCO
+  event handler would not be armed, and the next ping timeout would not
+  be received by userland, causing non-working connections with nothing
+  in the openvpn log (Linux and FreeBSD only, GH: #947)
+
+- prevent crash on invalid server-ipv6 argument, calling freeaddrinfo()
+  with a NULL pointer.  This only affects OpenBSD.  (Klemens Nanni).
+
+
+Overview of changes in 2.6.17
+=============================
+Bugfixes
+--------
+- Windows/interactive service: fix erroneous exit on error that could be
+  used by a local Windows users to achieve a local denial-of-service
+  (CVE-2025-13751)
+
+Security hardening
+------------------
+- Windows/interactive service: improve service pipe robustness against
+  file access races (uuid) and access by unauthorized processes (ACL).
+
+- upgrade bundled build instruction (vcpkg and patch) for pkcs11-helper
+  to 1.31, fixing a parser bug
+
+
 Overview of changes in 2.6.16
 =============================
 Code maintenance / Compat changes

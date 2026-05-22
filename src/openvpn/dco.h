@@ -104,11 +104,10 @@ bool dco_check_pull_options(int msglevel, const struct options *o);
 /**
  * Initialize the DCO context
  *
- * @param mode      the instance operating mode (P2P or multi-peer)
- * @param dco       the context to initialize
+ * @param c         the main instance context
  * @return          true on success, false otherwise
  */
-bool ovpn_dco_init(int mode, dco_context_t *dco);
+bool ovpn_dco_init(struct context *c);
 
 /**
  * Open/create a DCO interface
@@ -129,12 +128,13 @@ int open_tun_dco(struct tuntap *tt, openvpn_net_ctx_t *ctx, const char *dev);
 void close_tun_dco(struct tuntap *tt, openvpn_net_ctx_t *ctx);
 
 /**
- * Read data from the DCO communication channel (i.e. a control packet)
+ * Read and process data from the DCO communication channel
+ * (i.e. a control packet)
  *
  * @param dco       the DCO context
  * @return          0 on success or a negative error code otherwise
  */
-int dco_do_read(dco_context_t *dco);
+int dco_read_and_process(dco_context_t *dco);
 
 /**
  * Install a DCO in the main event loop
@@ -284,7 +284,7 @@ dco_check_pull_options(int msglevel, const struct options *o)
 }
 
 static inline bool
-ovpn_dco_init(int mode, dco_context_t *dco)
+ovpn_dco_init(struct context *c)
 {
     return true;
 }
@@ -301,7 +301,7 @@ close_tun_dco(struct tuntap *tt, openvpn_net_ctx_t *ctx)
 }
 
 static inline int
-dco_do_read(dco_context_t *dco)
+dco_read_and_process(dco_context_t *dco)
 {
     ASSERT(false);
     return 0;

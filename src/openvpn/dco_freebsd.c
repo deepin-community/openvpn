@@ -202,7 +202,7 @@ open_fd(dco_context_t *dco)
         return -1;
     }
 
-    dco->fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+    dco->fd = socket(AF_LOCAL, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (dco->fd != -1)
     {
         dco->open = true;
@@ -220,9 +220,11 @@ close_fd(dco_context_t *dco)
 }
 
 bool
-ovpn_dco_init(int mode, dco_context_t *dco)
+ovpn_dco_init(struct context *c)
 {
-    if (open_fd(dco) < 0)
+    c->c1.tuntap->dco.c = c;
+
+    if (open_fd(&c->c1.tuntap->dco) < 0)
     {
         msg(M_ERR, "Failed to open socket");
         return false;
@@ -558,8 +560,23 @@ dco_set_peer(dco_context_t *dco, unsigned int peerid,
     return ret;
 }
 
+static void
+dco_update_peer_stat(struct multi_context *m, uint32_t peerid, const nvlist_t *nvl)
+{
+    if (peerid >= m->max_clients || !m->instances[peerid])
+    {
+        msg(M_WARN, "dco_update_peer_stat: invalid peer ID %d returned by kernel", peerid);
+        return;
+    }
+
+    struct multi_instance *mi = m->instances[peerid];
+
+    mi->context.c2.dco_read_bytes = nvlist_get_number(nvl, "in");
+    mi->context.c2.dco_write_bytes = nvlist_get_number(nvl, "out");
+}
+
 int
-dco_do_read(dco_context_t *dco)
+dco_read_and_process(dco_context_t *dco)
 {
     struct ifdrv drv;
     uint8_t buf[4096];
@@ -590,9 +607,13 @@ dco_do_read(dco_context_t *dco)
         return -EINVAL;
     }
 
-    dco->dco_message_peer_id = nvlist_get_number(nvl, "peerid");
+    /* dco_message_peer_id is signed int, because other parts of the
+     * code treat "-1" as "this is a message not specific to one peer"
+     */
+    dco->dco_message_peer_id = (int)nvlist_get_number(nvl, "peerid");
 
-    type = nvlist_get_number(nvl, "notification");
+    type = (enum ovpn_notif_type)nvlist_get_number(nvl, "notification");
+
     switch (type)
     {
         case OVPN_NOTIF_DEL_PEER:
@@ -615,8 +636,15 @@ dco_do_read(dco_context_t *dco)
             {
                 const nvlist_t *bytes = nvlist_get_nvlist(nvl, "bytes");
 
-                dco->dco_read_bytes = nvlist_get_number(bytes, "in");
-                dco->dco_write_bytes = nvlist_get_number(bytes, "out");
+                if (dco->c->mode == CM_TOP)
+                {
+                    dco_update_peer_stat(dco->c->multi, dco->dco_message_peer_id, bytes);
+                }
+                else
+                {
+                    dco->c->c2.dco_read_bytes = nvlist_get_number(bytes, "in");
+                    dco->c->c2.dco_write_bytes = nvlist_get_number(bytes, "out");
+                }
             }
 
             dco->dco_message_type = OVPN_CMD_DEL_PEER;
@@ -626,7 +654,8 @@ dco_do_read(dco_context_t *dco)
             dco->dco_message_type = OVPN_CMD_SWAP_KEYS;
             break;
 
-        case OVPN_NOTIF_FLOAT: {
+        case OVPN_NOTIF_FLOAT:
+        {
             const nvlist_t *address;
 
             if (!nvlist_exists_nvlist(nvl, "address"))
@@ -647,10 +676,20 @@ dco_do_read(dco_context_t *dco)
 
         default:
             msg(M_WARN, "Unknown kernel notification %d", type);
+            dco->dco_message_type = OVPN_CMD_NO_MESSAGE;
             break;
     }
 
     nvlist_destroy(nvl);
+
+    if (dco->c->mode == CM_TOP)
+    {
+        multi_process_incoming_dco(dco);
+    }
+    else
+    {
+        process_incoming_dco(dco);
+    }
 
     return 0;
 }
@@ -668,9 +707,10 @@ dco_available(int msglevel)
      * loaded, or built into the kernel. */
     (void)kldload("if_ovpn");
 
-    fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
+    fd = socket(AF_LOCAL, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (fd < 0)
     {
+        msg(M_WARN | M_ERRNO, "%s: socket() failed, disabling data channel offload", __func__);
         return false;
     }
 
@@ -770,26 +810,9 @@ dco_event_set(dco_context_t *dco, struct event_set *es, void *arg)
     nvlist_destroy(nvl);
 }
 
-static void
-dco_update_peer_stat(struct multi_context *m, uint32_t peerid, const nvlist_t *nvl)
-{
-
-    if (peerid >= m->max_clients || !m->instances[peerid])
-    {
-        msg(M_WARN, "dco_update_peer_stat: invalid peer ID %d returned by kernel", peerid);
-        return;
-    }
-
-    struct multi_instance *mi = m->instances[peerid];
-
-    mi->context.c2.dco_read_bytes = nvlist_get_number(nvl, "in");
-    mi->context.c2.dco_write_bytes = nvlist_get_number(nvl, "out");
-}
-
 int
 dco_get_peer_stats_multi(dco_context_t *dco, struct multi_context *m)
 {
-
     struct ifdrv drv;
     uint8_t *buf = NULL;
     size_t buf_size = 4096;

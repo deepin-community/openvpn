@@ -1,3 +1,11 @@
+openvpn (2.6.20-0deepin1) unstable; urgency=medium
+
+  * New upstream version 2.6.20
+    - CVE-2026-35058
+    - CVE-2026-40215
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Fri, 22 May 2026 11:11:15 +0800
+
 openvpn (2.6.16-0deepin1) unstable; urgency=medium
 
   * New upstream version 2.6.16

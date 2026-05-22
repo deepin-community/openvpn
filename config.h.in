@@ -105,6 +105,9 @@
 /* Define to 1 if you have the 'chsize' function. */
 #undef HAVE_CHSIZE
 
+/* Define to 1 if you have the <cmocka_version.h> header file. */
+#undef HAVE_CMOCKA_VERSION_H
+
 /* struct cmsghdr needed for extended socket error support */
 #undef HAVE_CMSGHDR
 

@@ -471,6 +471,13 @@ man_status(struct management *man, const int version, struct status_output *so)
 }
 
 static void
+man_bytecount_stop(struct management *man)
+{
+    man->connection.bytecount_update_seconds = 0;
+    event_timeout_clear(&man->connection.bytecount_update_interval);
+}
+
+static void
 man_bytecount(struct management *man, const int update_seconds)
 {
     if (update_seconds > 0)
@@ -482,8 +489,7 @@ man_bytecount(struct management *man, const int update_seconds)
     }
     else
     {
-        man->connection.bytecount_update_seconds = 0;
-        event_timeout_clear(&man->connection.bytecount_update_interval);
+        man_bytecount_stop(man);
     }
     msg(M_CLIENT, "SUCCESS: bytecount interval changed");
 }
@@ -1992,6 +1998,7 @@ man_reset_client_socket(struct management *man, const bool exiting)
 {
     if (socket_defined(man->connection.sd_cli))
     {
+        man_bytecount_stop(man);
 #ifdef _WIN32
         man_stop_ne32(man);
 #endif
@@ -2005,13 +2012,14 @@ man_reset_client_socket(struct management *man, const bool exiting)
     }
     if (!exiting)
     {
-        if (man->settings.flags & MF_FORGET_DISCONNECT)
+        if (man->settings.flags & MF_FORGET_DISCONNECT && !man_password_needed(man))
         {
+            msg(D_MANAGEMENT, "MANAGEMENT: Reset authentication on disconnect");
             ssl_purge_auth(false);
             (void)ssl_clean_auth_token();
         }
 
-        if (man->settings.flags & MF_SIGNAL)
+        if (man->settings.flags & MF_SIGNAL && !man_password_needed(man))
         {
             int mysig = man_mod_signal(man, SIGUSR1);
             if (mysig >= 0)

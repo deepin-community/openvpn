@@ -53,7 +53,7 @@ create_dco_handle(const char *devname, struct gc_arena *gc)
 }
 
 bool
-ovpn_dco_init(int mode, dco_context_t *dco)
+ovpn_dco_init(struct context *c)
 {
     return true;
 }
@@ -423,7 +423,7 @@ dco_version_string(struct gc_arena *gc)
 }
 
 int
-dco_do_read(dco_context_t *dco)
+dco_read_and_process(dco_context_t *dco)
 {
     /* no-op on windows */
     ASSERT(0);

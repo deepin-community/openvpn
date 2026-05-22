@@ -747,7 +747,7 @@ multi_tcp_process_io(struct multi_context *m)
             /* incoming data on DCO? */
             else if (e->arg == MTCP_DCO)
             {
-                multi_process_incoming_dco(m);
+                dco_read_and_process(&m->top.c1.tuntap->dco);
             }
 #endif
             /* signal received? */
@@ -792,6 +792,7 @@ tunnel_server_tcp(struct context *top)
     int status;
 
     top->mode = CM_TOP;
+    top->multi = &multi;
     context_clear_2(top);
 
     /* initialize top-tunnel instance */
@@ -850,7 +851,9 @@ tunnel_server_tcp(struct context *top)
     }
 
 #ifdef ENABLE_ASYNC_PUSH
-    close(top->c2.inotify_fd);
+    msg(D_LOW, "%s: close multi.top.c2.inotify_fd (%d)",
+        __func__, multi.top.c2.inotify_fd);
+    close(multi.top.c2.inotify_fd);
 #endif
 
     /* shut down management interface */

@@ -1,4 +1,5 @@
 CVE-2026-12996.patch
+CVE-2026-13117.patch
 move_log_dir.patch
 auth-pam_libpam_so_filename.patch
 #debian_nogroup_for_sample_files.patch

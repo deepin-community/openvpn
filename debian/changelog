@@ -1,3 +1,10 @@
+openvpn (CVE-2026-13117+fix1) unstable; urgency=high
+
+  * Fix CVE-2026-13117: backport from upstream
+    (Closes: CVE-2026-13117)
+
+ -- deepin-ci-robot <packages@deepin.org>  
+
 openvpn (CVE-2026-12996+fix1) unstable; urgency=high
 
   * Fix CVE-2026-12996: backport from upstream

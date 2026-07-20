@@ -1,3 +1,15 @@
+openvpn (2.6.20-0deepin2) unstable; urgency=medium
+
+  * Backport CVE fixes via quilt patches:
+    - CVE-2026-13698: Ensure tls-crypt keys are not setup twice
+    - CVE-2026-13122: Ensure we only get session from valid tokens for external-auth
+    - CVE-2026-13117: Add use-after-free check for tls_wrap_reneg.work.data
+    - CVE-2026-12996: Add use-after-free check for ack_write_buf
+    - CVE-2026-11771: 1-byte buffer overrun on NTLMv2 proxy responses
+      (included in upstream 2.6.20, NTLM add_security_buffer length check)
+
+ -- deepin-ci-robot <packages@deepin.org>  Sun, 19 Jul 2026 01:32:26 +0800
+
 openvpn (2.6.20-0deepin1) unstable; urgency=medium
 
   * New upstream version 2.6.20

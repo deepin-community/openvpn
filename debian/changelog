@@ -1,3 +1,9 @@
+openvpn (2.6.20-0deepin5) unstable; urgency=medium
+
+  * fix(cve): CVE-2026-13698
+
+ -- deepin-ci-robot <packages@deepin.org>  Tue, 21 Jul 2026 14:32:15 +0800
+
 openvpn (2.6.20-0deepin4) unstable; urgency=medium
 
   * fix(cve): CVE-2026-13117

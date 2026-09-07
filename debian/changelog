@@ -1,3 +1,12 @@
+openvpn (2.6.20-0deepin8) unstable; urgency=medium
+
+  * fix(cve): CVE-2026-84471 (unknown) - Move check_session_buf_not_used
+    method into the method that free the buffer   Upstream:
+    https://github.com/OpenVPN/openvpn/commit/c52f940196444668284eb06ec0
+    cf08a8bc3cd36b
+
+ -- deepin-ci-robot <packages@deepin.org>  Mon, 07 Sep 2026 11:31:52 +0800
+
 openvpn (2.6.20-0deepin7) unstable; urgency=medium
 
   * fix(cve): CVE-2026-12932

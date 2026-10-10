@@ -1,3 +1,12 @@
+openvpn (2.6.20-0deepin9) unstable; urgency=medium
+
+  * fix(cve): CVE-2026-84790 (unknown) - Check for null-bytes in
+    certificate subjects   Upstream:
+    https://github.com/OpenVPN/openvpn/commit/cf4384eef4676a01bd3ee98fa6
+    02f7b2af8079ea
+
+ -- deepin-ci-robot <packages@deepin.org>  Sat, 10 Oct 2026 17:54:27 +0800
+
 openvpn (2.6.20-0deepin8) unstable; urgency=medium
 
   * fix(cve): CVE-2026-84471 (unknown) - Move check_session_buf_not_used
